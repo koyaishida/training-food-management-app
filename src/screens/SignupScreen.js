@@ -1,8 +1,9 @@
-import React, {useState}from 'react';
+import React , {useState} from 'react';
 import { StyleSheet, View,Text, TextInput, TouchableHighlight } from 'react-native';
 import firebase from "firebase"
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native'
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -38,26 +39,24 @@ const styles = StyleSheet.create({
   buttonTitle: {
     fontSize:20,
     color: "#fff",
-  },
-  toSignup :{
-    marginTop: 10,
-    alignSelf: "center"
   }
   
 });
 
 
-const LoginScreen = (props) => {
+const SignupScreen = (props) => {
 
-  const [email,setEmail] =useState("k.157.2@gmail.com")
-  const [password,setPassword] =useState("koya1572")
+  const [email,setEmail] =useState("")
+  const [password,setPassword] =useState("")
 
-  const handleLogin = () =>{
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(()=>{
-        console.log("success")
-        console.log(props.navigation.navigate("Home"))
-        const resetAction = 
+  // signup function
+  const handleSignup = () => {
+    
+
+    firebase.auth().createUserWithEmailAndPassword(email,password)
+    .then(()=>{
+      console.log("success")
+      const resetAction = 
           CommonActions.reset({
             index:0,
             routes: [
@@ -65,42 +64,32 @@ const LoginScreen = (props) => {
             ],
           })
         props.navigation.dispatch(resetAction)
-      })
+    })
       
-      .catch((error)=>{
-        console.log(error)
-        console.log("error")
-      })
-    
+    .catch((error)=>{
+      console.log(error)
+    })
   }
-  const switchToSignup = ()=>[
-    props.navigation.navigate("Signup")
-  ]
+
+  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        ログイン
+        新規登録
       </Text>
-
       <TextInput style={styles.input} value={email} placeholder="Email" 
       onChangeText={text => setEmail(text)} autoCapitalize="none" autoCorrect={false}/>
 
       {/* onChangeではなくonChangeText */}
       <TextInput style={styles.input} value={password} placeholder="Password" onChangeText={text => setPassword(text)} autoCapitalize="none" autoCorrect={false} secureTextEntry={true}/>
-
-      <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-        onPress={handleLogin}>
-        <Text style={styles.buttonTitle}>ログインする</Text>
+      
+      <TouchableHighlight style={styles.button} underlayColor="#C70F66" onPress={handleSignup}>
+        <Text style={styles.buttonTitle}>送信する</Text>
       </TouchableHighlight>
-      <TouchableOpacity  style={styles.toSignup} onPress={switchToSignup}>
-        <Text>
-          メンバー登録する
-        </Text>
-      </TouchableOpacity>
 
     </View>
   );
 }
 
-export default LoginScreen
+export default SignupScreen
