@@ -56,7 +56,7 @@ const LoginScreen = (props) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(()=>{
         console.log("success")
-        console.log(props.navigation.navigate("Home"))
+        
         const resetAction = 
           CommonActions.reset({
             index:0,
@@ -66,7 +66,7 @@ const LoginScreen = (props) => {
           })
         props.navigation.dispatch(resetAction)
       })
-      
+
       .catch((error)=>{
         console.log(error)
         console.log("error")

@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState,useEffect}from 'react';
 import { StyleSheet, View, Text,TouchableHighlight } from 'react-native';
 import firebase from "firebase"
 import {LineChart} from "react-native-chart-kit"
@@ -51,64 +51,63 @@ const chartConfig = {
 
 
 const decimalPoint  = (y)=>{
- return parseFloat(y).toFixed(1)
+return parseFloat(y).toFixed(1)
 }
 
 const toInteger = (y)=>{
   return parseFloat(y).toFixed()
- }
+}
 
+dateToString = (date)=>{
+  const str = date.toDate().toISOString();
+  return str.split("T")[0] 
+}
 
-class HomeScreen extends React.Component {
+const HomeScreen = (props)=> {
+  const [weightData,setWeightData] = useState([])
+  const [weightLabels,setWeightLabels] = useState([])
+  const [weightList,setWeightList] = useState([1])
+  const [currentKcal,setCurrentKcal] = useState([1])
 
   
-  state = {
-    weightData : [],
-    weightLabels : [],
-    weightList :[1],
-    kcalList:[1],
-    kcalLabels:[1],
-    currentKcal: "",
-  }
 
-  dateToString = (date)=>{
-    const str = date.toDate().toISOString();
-    return str.split("T")[0] 
-  }
-
-  componentWillMount(){
-    console.log(this.props)
   
-  //   const {currentUser} = firebase.auth();
-  //   const db =firebase.firestore()
-
+     
+  useEffect (()=>{
+    let unMounted = false ;
+    const {currentUser} = firebase.auth();
+    const db =firebase.firestore()
     
-  //   db.collection(`users/${currentUser.uid}/weight`)
-  //   .onSnapshot((querySnapshot)=>{
+     db.collection(`users/${currentUser.uid}/weight`)
+     .onSnapshot((querySnapshot)=>{
       
-  //     const weightData =[];
-  //     //firebaseから体重データを取得
-  //      querySnapshot.forEach((doc)=>{
-  //        weightData.push({...doc.data(),key: doc.id})
-  //       })
-  //      this.setState({weightData})
+       const weightData =[];
+       //firebaseから体重データを取得
+        querySnapshot.forEach((doc)=>{
+          weightData.push({...doc.data(),key: doc.id})
+         })
+        setWeightData(weightData)
 
-  //     //日付の取得
-  //     const weightLabels = [];
-  //     const sortedWeightData = [...weightData].sort((a,b)=>(a.date.seconds - b.date.seconds))
+       //日付の取得
+       const weightLabels = [];
+       const sortedWeightData = [...weightData].sort((a,b)=>(a.date.seconds - b.date.seconds))
 
-  //     sortedWeightData.forEach((item)=>{
-  //       weightLabels.push(this.dateToString(item.date).slice(5))
-  //     })
-  //     this.setState({weightLabels})
+       sortedWeightData.forEach((item)=>{
+         weightLabels.push(dateToString(item.date).slice(5))
+       })
+       setWeightLabels(weightLabels)
 
-  //     //体重の値の取得
-  //     const weightList =[]
-  //     sortedWeightData.forEach((item)=>{
-  //       weightList.push(parseFloat(item.weight).toFixed())
-  //     })
-  //     this.setState({weightList:weightList})
-  //   })
+       //体重の値の取得
+       const weightList =[]
+       sortedWeightData.forEach((item)=>{
+         weightList.push(parseFloat(item.weight).toFixed(1))
+       })
+       setWeightList(weightList)
+     })
+    
+     return ()=>{ unMounted = true}
+  },[])
+     
     
 
   //   db.collection(`users/${currentUser.uid}/food`)
@@ -154,17 +153,12 @@ class HomeScreen extends React.Component {
   //     }
   //     this.setState({kcalLabels})
   //   })
-  }
-  
-  
-
-  render(){
     return (
       <View style={styles.container}>
         <View  style={styles.upperContainer}>
           <View>
             <Text style={styles.upperContainerTitle}>摂取カロリー</Text>
-            <Text style={styles.upperContainerText}>{`${this.state.currentKcal}kcal`}</Text>
+            <Text style={styles.upperContainerText}>{`${currentKcal}kcal`}</Text>
           </View>
 
           <View>
@@ -174,12 +168,10 @@ class HomeScreen extends React.Component {
         </View>
         <LineChart 
             data = {{
-                  labels: [1,2,3],
-                  datasets:[{data:[1,2,3,4,]}]
-              // labels: this.state.weightLabels,
-              // datasets: [{data:this.state.weightList
-              // },
-              // ] 
+               labels: weightLabels,
+               datasets: [{data:weightList
+               },
+               ] 
             }}
             formatYLabel={decimalPoint}
             yAxisSuffix=" kg"
@@ -188,7 +180,7 @@ class HomeScreen extends React.Component {
             chartConfig={chartConfig}
             withInnerLines={false}
             withOuterLines={false}
-        />
+        /> 
         {/* <LineChart 
             data = {{
               labels: this.state.kcalLabels,
@@ -203,28 +195,28 @@ class HomeScreen extends React.Component {
             withOuterLines={false}
             /> */}
 
-        <TouchableHighlight style={styles.button} underlayColor="#C70F66"
+        {/* <TouchableHighlight style={styles.button} underlayColor="#C70F66"
         onPress={()=>this.props.navigation.navigate("Login")}
         >
         <Text style={styles.buttonTitle}>今日のトレーニング
         </Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
 
-        {/* <TouchableHighlight style={styles.button} underlayColor="#C70F66"
+         {/* <TouchableHighlight style={styles.button} underlayColor="#C70F66"
         onPress={()=>{this.props.navigation.navigate("FoodManagement")}}
         >
           <Text style={styles.buttonTitle}>今日の食事</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
 
         <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-        onPress={()=>{this.props.navigation.navigate("WeightManagement")}}
+        onPress={()=>props.navigation.navigate("WeightManagement")}
         >
         <Text style={styles.buttonTitle} >今日の体重</Text>
-        </TouchableHighlight> */}
+        </TouchableHighlight> 
 
       </View>
     ); 
-  } 
+  
 }
 
 export default HomeScreen
