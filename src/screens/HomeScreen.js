@@ -67,14 +67,16 @@ const HomeScreen = (props)=> {
   const [weightData,setWeightData] = useState([])
   const [weightLabels,setWeightLabels] = useState([])
   const [weightList,setWeightList] = useState([1])
-  const [currentKcal,setCurrentKcal] = useState([1])
+  const [foodData,setFoodData] = useState([])
+  const [kcalList,setKcalList] = useState([1])
+  const [currentKcal,setCurrentKcal] = useState([])
+  const [kcalLabels,setKcalLabels] = useState([])
 
   
 
   
      
   useEffect (()=>{
-    let unMounted = false ;
     const {currentUser} = firebase.auth();
     const db =firebase.firestore()
     
@@ -104,55 +106,56 @@ const HomeScreen = (props)=> {
        })
        setWeightList(weightList)
      })
-    
-     return ()=>{ unMounted = true}
+
+     db.collection(`users/${currentUser.uid}/food`)
+     .onSnapshot((querySnapshot)=>{
+       const foodData =[];
+       //firebaseから食事データを取得
+        querySnapshot.forEach((doc)=>{
+          foodData.push({...doc.data(),key: doc.id})
+         })
+        setFoodData(foodData)
+       
+       //kcalの加工
+       const kcalList =[]
+       const sortedKcalData = [...foodData].sort((a,b)=>(a.date.seconds - b.date.seconds))
+      
+       for(let i = 0; i < sortedKcalData.length ; i++){
+         if(i === 0){
+           kcalList.push(parseFloat(sortedKcalData[i].kcal))
+         }else{
+           if(dateToString(sortedKcalData[i].date) === dateToString(sortedKcalData[i -1].date)){
+             kcalList[kcalList.length-1] += parseFloat(sortedKcalData[i].kcal)
+           }else{
+               kcalList.push(parseFloat(sortedKcalData[i].kcal))
+             }
+         }
+       }
+       setKcalList(kcalList)
+       setCurrentKcal(kcalList[kcalList.length-1]) 
+
+
+      //kcalLabelの加工
+       const kcalLabels = [];
+
+       for (let i = 0; i < sortedKcalData.length; i++){
+         if(i === 0){
+           kcalLabels.push(dateToString(sortedKcalData[i].date).slice(5))
+         }else {
+           if(dateToString(sortedKcalData[i].date) === dateToString(sortedKcalData[i -1].date)){
+           }else{
+               kcalLabels.push(dateToString(sortedKcalData[i].date).slice(5))
+             }
+         }
+       }
+       setKcalLabels(kcalLabels)
+     })
+     return (() => console.log('Clean Up '));
   },[])
      
     
 
-  //   db.collection(`users/${currentUser.uid}/food`)
-  //   .onSnapshot((querySnapshot)=>{
-  //     const foodData =[];
-  //     //firebaseから食事データを取得
-  //      querySnapshot.forEach((doc)=>{
-  //        foodData.push({...doc.data(),key: doc.id})
-  //       })
-  //      this.setState({foodData})
-       
-  //     //kcalの加工
-  //     const kcalList =[]
-  //     const sortedKcalData = [...foodData].sort((a,b)=>(a.date.seconds - b.date.seconds))
-      
-  //     for(let i = 0; i < sortedKcalData.length ; i++){
-  //       if(i === 0){
-  //         kcalList.push(parseFloat(sortedKcalData[i].kcal))
-  //       }else{
-  //         if(this.dateToString(sortedKcalData[i].date) === this.dateToString(sortedKcalData[i -1].date)){
-  //           kcalList[kcalList.length-1] += parseFloat(sortedKcalData[i].kcal)
-  //         }else{
-  //             kcalList.push(parseFloat(sortedKcalData[i].kcal))
-  //           }
-  //       }
-  //     }
-  //     this.setState({kcalList})
-  //     this.setState({currentKcal :kcalList[kcalList.length-1] }) 
-
-
-  //     //kcalLabelの加工
-  //     const kcalLabels = [];
-
-  //     for (let i = 0; i < sortedKcalData.length; i++){
-  //       if(i === 0){
-  //         kcalLabels.push(this.dateToString(sortedKcalData[i].date).slice(5))
-  //       }else {
-  //         if(this.dateToString(sortedKcalData[i].date) === this.dateToString(sortedKcalData[i -1].date)){
-  //         }else{
-  //             kcalLabels.push(this.dateToString(sortedKcalData[i].date).slice(5))
-  //           }
-  //       }
-  //     }
-  //     this.setState({kcalLabels})
-  //   })
+     
     return (
       <View style={styles.container}>
         <View  style={styles.upperContainer}>
@@ -181,10 +184,10 @@ const HomeScreen = (props)=> {
             withInnerLines={false}
             withOuterLines={false}
         /> 
-        {/* <LineChart 
+        <LineChart 
             data = {{
-              labels: this.state.kcalLabels,
-              datasets: [{data: this.state.kcalList},
+              labels: kcalLabels,
+              datasets: [{data:kcalList},
             ]}}
             formatYLabel={toInteger}
             yAxisSuffix="kcal"
@@ -193,7 +196,7 @@ const HomeScreen = (props)=> {
             chartConfig={chartConfig}
             withInnerLines={false}
             withOuterLines={false}
-            /> */}
+            />
 
         {/* <TouchableHighlight style={styles.button} underlayColor="#C70F66"
         onPress={()=>this.props.navigation.navigate("Login")}
@@ -202,11 +205,11 @@ const HomeScreen = (props)=> {
         </Text>
         </TouchableHighlight> */}
 
-         {/* <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-        onPress={()=>{this.props.navigation.navigate("FoodManagement")}}
-        >
+        <TouchableHighlight style={styles.button} 
+                            underlayColor="#C70F66"
+        onPress={()=>props.navigation.navigate("FoodManagement",{foodData:foodData})}>
           <Text style={styles.buttonTitle}>今日の食事</Text>
-        </TouchableHighlight> */}
+        </TouchableHighlight>
 
         <TouchableHighlight style={styles.button} underlayColor="#C70F66"
         onPress={()=>props.navigation.navigate("WeightManagement")}

@@ -8,6 +8,8 @@ import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import WeightManagementScreen from './src/screens/WeightManagementScreen';
+import FoodManagementScreen from './src/screens/FoodManagementScreen';
+import FoodAddScreen from './src/screens/FoodAddScreen';
 
 require("firebase/firestore")
 
@@ -46,6 +48,8 @@ require("firebase/firestore")
          <Stack.Screen name="Signup" component={SignupScreen} />
          <Stack.Screen name="Home" component={HomeScreen} />   
          <Stack.Screen name="WeightManagement" component={WeightManagementScreen} />   
+         <Stack.Screen name="FoodManagement" component={FoodManagementScreen} />   
+         <Stack.Screen name="FoodAdd" component={FoodAddScreen} />   
        </Stack.Navigator>
      </NavigationContainer>
    )
