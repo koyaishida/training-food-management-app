@@ -52,6 +52,7 @@ const FoodAddScreen = (props) => {
          date: new Date()
        })
       .then(()=> {
+        //FoodManagementScreenに移動する際、paramsが無いため、Foodリストが表示されない。
         props.navigation.navigate("FoodManagement")
       })
       .catch((error)=>{

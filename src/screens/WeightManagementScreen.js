@@ -1,5 +1,5 @@
 import React ,{useState}from 'react';
-import { StyleSheet, View, TextInput,Text } from 'react-native';
+import { StyleSheet, View, TextInput,Text,  } from 'react-native';
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
 
@@ -44,9 +44,9 @@ const WeightManagementScreen = (props) => {
      const db = firebase.firestore();
      const {currentUser} = firebase.auth();
       db.collection(`users/${currentUser.uid}/weight`).add({
-        weight : weight,
-        bodyFatPercentage : bodyFatPercentage,
-        date: new Date()
+          weight : weight,
+          bodyFatPercentage : bodyFatPercentage,
+          date: new Date()
       })
      .then(()=> {
        props.navigation.navigate("Home")

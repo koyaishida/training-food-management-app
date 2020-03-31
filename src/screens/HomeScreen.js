@@ -63,6 +63,9 @@ dateToString = (date)=>{
   return str.split("T")[0] 
 }
 
+const byDate = ((a,b)=>(a.date.seconds - b.date.seconds))
+
+
 const HomeScreen = (props)=> {
   const [weightData,setWeightData] = useState([])
   const [weightLabels,setWeightLabels] = useState([])
@@ -79,7 +82,7 @@ const HomeScreen = (props)=> {
   useEffect (()=>{
     const {currentUser} = firebase.auth();
     const db =firebase.firestore()
-    
+
      db.collection(`users/${currentUser.uid}/weight`)
      .onSnapshot((querySnapshot)=>{
       
@@ -92,7 +95,7 @@ const HomeScreen = (props)=> {
 
        //日付の取得
        const weightLabels = [];
-       const sortedWeightData = [...weightData].sort((a,b)=>(a.date.seconds - b.date.seconds))
+       const sortedWeightData = [...weightData].sort(byDate)
 
        sortedWeightData.forEach((item)=>{
          weightLabels.push(dateToString(item.date).slice(5))
@@ -104,6 +107,7 @@ const HomeScreen = (props)=> {
        sortedWeightData.forEach((item)=>{
          weightList.push(parseFloat(item.weight).toFixed(1))
        })
+
        setWeightList(weightList)
      })
 
@@ -118,7 +122,7 @@ const HomeScreen = (props)=> {
        
        //kcalの加工
        const kcalList =[]
-       const sortedKcalData = [...foodData].sort((a,b)=>(a.date.seconds - b.date.seconds))
+       const sortedKcalData = [...foodData].sort(byDate)
       
        for(let i = 0; i < sortedKcalData.length ; i++){
          if(i === 0){
@@ -198,12 +202,12 @@ const HomeScreen = (props)=> {
             withOuterLines={false}
             />
 
-        {/* <TouchableHighlight style={styles.button} underlayColor="#C70F66"
+        <TouchableHighlight style={styles.button} underlayColor="#C70F66"
         onPress={()=>this.props.navigation.navigate("Login")}
         >
         <Text style={styles.buttonTitle}>今日のトレーニング
         </Text>
-        </TouchableHighlight> */}
+        </TouchableHighlight> 
 
         <TouchableHighlight style={styles.button} 
                             underlayColor="#C70F66"

@@ -39,21 +39,16 @@ const styles = StyleSheet.create({
 
 
 const  FoodList =(props)=> {
-  
   const renderFood =({item})=> {
     return(
-      <TouchableHighlight style={styles.foodList} onPress={()=>{props.navigation.navigate("FoodDetail",{food : item})}}>
-
+      <TouchableHighlight style={styles.foodList} onPress={()=>{props.navigation.navigate("FoodAdd",{food : item})}}>
         <View style={styles.foodListItem}>
           <View style={styles.inputLocation}>
             <Text style={styles.foodMemo}>{item.foodMemo}</Text>
             <Text style={styles.kcalValue}>{item.kcal}</Text>
             <Text style={styles.unit}>kcal</Text>
-            
           </View>
-          
         </View>
-
       </TouchableHighlight>
     )
   }

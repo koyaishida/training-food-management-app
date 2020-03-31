@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 
 const  FoodManagementScreen = (props)=> {
-
+  console.log(props)
   dateToString = (date)=>{
     const str = date.toDate().toISOString();
     return str.split("T")[0]
