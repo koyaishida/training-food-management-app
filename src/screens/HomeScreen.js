@@ -173,9 +173,10 @@ const HomeScreen = (props)=> {
             <Text style={styles.upperContainerText}>5kg</Text>
           </View>
         </View>
+        {/* ユーザーが初めてログインした際にエラー発生 */}
         <LineChart 
             data = {{
-               labels: weightLabels,
+               labels: weightLabels ,
                datasets: [{data:weightList
                },
                ] 
@@ -203,21 +204,19 @@ const HomeScreen = (props)=> {
             />
 
         <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-        onPress={()=>this.props.navigation.navigate("Login")}
-        >
-        <Text style={styles.buttonTitle}>今日のトレーニング
-        </Text>
+          onPress={()=>props.navigation.navigate("TrainingMenu")}>
+          <Text style={styles.buttonTitle}>今日のトレーニング
+          </Text>
         </TouchableHighlight> 
 
         <TouchableHighlight style={styles.button} 
                             underlayColor="#C70F66"
-        onPress={()=>props.navigation.navigate("FoodManagement",{foodData:foodData})}>
+          onPress={()=>props.navigation.navigate("FoodManagement",{foodData:foodData})}>
           <Text style={styles.buttonTitle}>今日の食事</Text>
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-        onPress={()=>props.navigation.navigate("WeightManagement")}
-        >
+          onPress={()=>props.navigation.navigate("WeightManagement")}>
         <Text style={styles.buttonTitle} >今日の体重</Text>
         </TouchableHighlight> 
 

@@ -10,6 +10,8 @@ import SignupScreen from './src/screens/SignupScreen';
 import WeightManagementScreen from './src/screens/WeightManagementScreen';
 import FoodManagementScreen from './src/screens/FoodManagementScreen';
 import FoodAddScreen from './src/screens/FoodAddScreen';
+import WorkOutManagementScreen from './src/screens/WorkOutManagementScreen';
+import TrainingMenuScreen from './src/screens/TrainingMenuScreen';
 
 require("firebase/firestore")
 
@@ -50,6 +52,8 @@ require("firebase/firestore")
          <Stack.Screen name="WeightManagement" component={WeightManagementScreen} />   
          <Stack.Screen name="FoodManagement" component={FoodManagementScreen} />   
          <Stack.Screen name="FoodAdd" component={FoodAddScreen} />   
+         <Stack.Screen name="WorkOutManagement" component={WorkOutManagementScreen} />   
+         <Stack.Screen name="TrainingMenu" component={TrainingMenuScreen} />   
        </Stack.Navigator>
      </NavigationContainer>
    )

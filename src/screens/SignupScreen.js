@@ -56,6 +56,29 @@ const SignupScreen = (props) => {
     firebase.auth().createUserWithEmailAndPassword(email,password)
     .then(()=>{
       console.log("success")
+      const db = firebase.firestore();
+     const {currentUser} = firebase.auth();
+      db.collection(`users/${currentUser.uid}/trainingMenu`).add({
+        "胸" : [
+          "ベンチプレス","チェストプレス","ダンベルフライ"
+        ],
+        "背中": [
+          "懸垂","デッドリフト","ラットプルダウン"
+        ],
+        "脚": [
+          "スクワット","レッグプレス","レッグエクステンション"
+        ],
+        "肩":[
+          "サイドレイズ","ショルダープレス","フロントレイズ",
+        ],
+        "腕": [
+          "アームカール"
+        ],
+        "その他": [
+          "ランニング","ウォーキング",
+        ]
+          
+      })
       const resetAction = 
           CommonActions.reset({
             index:0,
@@ -63,7 +86,7 @@ const SignupScreen = (props) => {
               {name: "Home"}
             ],
           })
-        props.navigation.dispatch(resetAction)
+      props.navigation.dispatch(resetAction)
     })
       
     .catch((error)=>{

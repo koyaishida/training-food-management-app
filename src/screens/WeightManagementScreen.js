@@ -43,10 +43,28 @@ const WeightManagementScreen = (props) => {
     console.log("press")
      const db = firebase.firestore();
      const {currentUser} = firebase.auth();
-      db.collection(`users/${currentUser.uid}/weight`).add({
-          weight : weight,
-          bodyFatPercentage : bodyFatPercentage,
-          date: new Date()
+      db.collection(`users/${currentUser.uid}/trainingMenu`).add({
+        "胸" : [
+          "ベンチプレス","チェストプレス","ダンベルフライ"
+        ],
+        "背中": [
+          "懸垂","デッドリフト","ラットプルダウン"
+        ],
+        "脚": [
+          "スクワット","レッグプレス","レッグエクステンション"
+        ],
+        "肩":[
+          "サイドレイズ","ショルダープレス","フロントレイズ",
+        ],
+        "腕": [
+          "アームカール"
+        ],
+        "その他": [
+          "ランニング","ウォーキング",
+        ]
+          // weight : weight,
+          // bodyFatPercentage : bodyFatPercentage,""
+          // date: new Date()
       })
      .then(()=> {
        props.navigation.navigate("Home")
