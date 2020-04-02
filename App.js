@@ -12,6 +12,7 @@ import FoodManagementScreen from './src/screens/FoodManagementScreen';
 import FoodAddScreen from './src/screens/FoodAddScreen';
 import WorkOutManagementScreen from './src/screens/WorkOutManagementScreen';
 import TrainingMenuScreen from './src/screens/TrainingMenuScreen';
+import TrainingAddScreen from './src/screens/TrainingAddScreen';
 
 require("firebase/firestore")
 
@@ -30,14 +31,7 @@ require("firebase/firestore")
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+  
 
   const Stack = createStackNavigator();
 
@@ -54,6 +48,7 @@ require("firebase/firestore")
          <Stack.Screen name="FoodAdd" component={FoodAddScreen} />   
          <Stack.Screen name="WorkOutManagement" component={WorkOutManagementScreen} />   
          <Stack.Screen name="TrainingMenu" component={TrainingMenuScreen} />   
+         <Stack.Screen name="TrainingAdd" component={TrainingAddScreen} />   
        </Stack.Navigator>
      </NavigationContainer>
    )

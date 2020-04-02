@@ -1,17 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View,TouchableHighlight,SectionList,SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View,TouchableHighlight,SectionList,SafeAreaView,TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
     flex: 1,
   },
-  header: {
-    backgroundColor: 'green',
+  label: {
     fontSize: 20,
     color: "#fff",
     padding: 12,
     fontWeight: "bold",
+    width: "90%",
   },
   item: {
     padding: 12,
@@ -20,14 +20,30 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
     backgroundColor: '#fff',
   },
+  labelContainer: {
+    display: "flex",
+    flexDirection:"row",
+    backgroundColor: 'green',
+    color: "#fff",
+  },
+  addMenu: {
+    color: "#fff",
+    fontSize: 28,
+    lineHeight: 38,
+  }
 })
-
+ 
  const  TrainingMenuList =(props)=> {
-   console.log(props.trainingMenu)
+  const {navigation} = props.navigation
+   const array = ["胸","背中","肩","腕","脚","その他"]
+   const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
    const DATA = props.trainingMenu
+    DATA.sort(sortedTraining)
+   
+   
    const Item = ({ title }) => (
     <TouchableHighlight style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{title}</Text>
     </TouchableHighlight>
   );
    return(
@@ -37,7 +53,12 @@ const styles = StyleSheet.create({
         keyExtractor={(item, index) => item + index}
         renderItem={({ item }) => <Item title={item} />}
         renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>{title}</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate("TrainingAdd",{trainingMenu: title,id:props.id})}>
+              <Text style={styles.addMenu}>+</Text>
+            </TouchableOpacity>
+          </View>
         )}
       />
   </SafeAreaView>

@@ -1,7 +1,6 @@
 import React ,{useState,useEffect}from 'react';
 import { StyleSheet, View,} from 'react-native';
 import TrainingMenuList from "../components/TrainingMenuList"
-import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
 
 
@@ -20,8 +19,7 @@ const styles = StyleSheet.create({
 
 const TrainingMenuScreen = (props)=> {
    const [trainingMenu,setTrainingMenu] = useState([])
-  // const [foodList,setFoodList] = useState([])
-  // const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
+   const [id,setId] = useState()
 
   useEffect(()=>{
     const {currentUser} = firebase.auth();
@@ -35,21 +33,20 @@ const TrainingMenuScreen = (props)=> {
             {title,data}
           ))
           setTrainingMenu(trainingMenu)
+           setId(doc.id)
         })
+        
      })
-     console.log(trainingMenu)
   },[])
     
   
-  
 
- 
     return (
       <View style={styles.container}>
-           <TrainingMenuList 
-            trainingMenu={trainingMenu}
-            navigation={props.navigation}/> 
-        <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("FoodAdd")}/>
+        <TrainingMenuList 
+          trainingMenu = {trainingMenu}
+          navigation ={ props}
+          id = {id}/> 
       </View>
     ); 
   

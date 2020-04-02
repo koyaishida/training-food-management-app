@@ -66,6 +66,7 @@ dateToString = (date)=>{
 const byDate = ((a,b)=>(a.date.seconds - b.date.seconds))
 
 
+
 const HomeScreen = (props)=> {
   const [weightData,setWeightData] = useState([])
   const [weightLabels,setWeightLabels] = useState([])
@@ -154,6 +155,10 @@ const HomeScreen = (props)=> {
        }
        setKcalLabels(kcalLabels)
      })
+      console.log(Boolean(weightLabels)) 
+      console.log(Boolean(weightList))
+      console.log(weightLabels)
+      console.log(weightList)
      return (() => console.log('Clean Up '));
   },[])
      
@@ -174,10 +179,10 @@ const HomeScreen = (props)=> {
           </View>
         </View>
         {/* ユーザーが初めてログインした際にエラー発生 */}
-        <LineChart 
+         {/* <LineChart 
             data = {{
                labels: weightLabels ,
-               datasets: [{data:weightList
+                datasets: [{data:weightList
                },
                ] 
             }}
@@ -188,11 +193,13 @@ const HomeScreen = (props)=> {
             chartConfig={chartConfig}
             withInnerLines={false}
             withOuterLines={false}
-        /> 
-        <LineChart 
+        />  */}
+         <LineChart 
             data = {{
-              labels: kcalLabels,
-              datasets: [{data:kcalList},
+              labels: [],
+              datasets: [{data:[0]},
+              // labels: kcalLabels,
+              // datasets: [{data:kcalList},
             ]}}
             formatYLabel={toInteger}
             yAxisSuffix="kcal"
@@ -201,7 +208,7 @@ const HomeScreen = (props)=> {
             chartConfig={chartConfig}
             withInnerLines={false}
             withOuterLines={false}
-            />
+            /> 
 
         <TouchableHighlight style={styles.button} underlayColor="#C70F66"
           onPress={()=>props.navigation.navigate("TrainingMenu")}>
